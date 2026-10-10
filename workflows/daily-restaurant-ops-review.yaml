@@ -1,0 +1,28 @@
+id: daily-restaurant-ops-review
+name: Daily Restaurant Ops Review
+steps:
+  - id: reviews
+    agent: guest-review-responder
+    on_failure: continue
+    input: >-
+      Ingest guest reviews and ratings from ./reviews/ in your working directory. Categorize guest feedback across
+      food, service speed, and ambiance. Draft personalized responses for review and save them to ./responses/.
+      Include the sentiment breakdown in your reply. If ./reviews/ is empty, reply stating no reviews were found.
+  - id: inventory
+    agent: inventory-waste-tracker
+    on_failure: continue
+    input: >-
+      Analyze the daily kitchen waste logs and inventory counts in ./inventory/ in your working directory.
+      Identify high-spoilage ingredients, compute optimal par ordering levels, and save the supplier prep guide to ./orders/.
+      Include the top waste items in your reply.
+  - id: menu
+    agent: menu-margin-optimizer
+    input: >-
+      Audit POS sales reports and recipe cost cards in ./pos/ to evaluate dish profit margins. Incorporate the operational
+      feedback and waste data below to formulate daily menu specials and pricing adjustments:
+
+      Guest Feedback Sentiment:
+      {{reviews.output}}
+
+      Kitchen Waste & Inventory Analysis:
+      {{inventory.output}}
